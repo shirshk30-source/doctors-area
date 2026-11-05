@@ -137,6 +137,10 @@ this.reset();
 <script>
 const SUPABASE_URL = "https://dmgyputmbjwexdrqixzr.supabase.co";
 const SUPABASE_KEY = "sb_publishable_ekRTmM7LHnd-CImoMkhetw_KMrFN194";
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 const departments=[
 "Panchakarma","Agad Tantra","Shalya Tantra","Shalakya Tantra",
 "Stri and Prasuti Tantra","Physiotherapy","Swasthavritta",
