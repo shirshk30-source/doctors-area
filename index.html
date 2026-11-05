@@ -73,9 +73,40 @@ td,th{padding:10px;border-bottom:1px solid #ddd;text-align:left}
 
 <section id="attendance">
 <h2>Attendance</h2>
-<p>Attendance demonstration</p>
-<button onclick="document.getElementById('att').innerText='Check-in recorded for '+new Date().toLocaleString()">Mark Attendance</button>
-<p id="att"></p>
+
+<form onsubmit="
+event.preventDefault();
+const name=document.getElementById('colleagueName').value.trim();
+if(!name)return;
+const now=new Date();
+const row=document.createElement('tr');
+[name,now.toLocaleDateString(),now.toLocaleTimeString()].forEach(v=>{
+const td=document.createElement('td');
+td.textContent=v;
+row.appendChild(td);
+});
+document.getElementById('attendanceList').appendChild(row);
+this.reset();
+">
+<label>Colleague Name</label>
+<input id="colleagueName" required placeholder="Enter your full name">
+
+<button type="submit">Mark Attendance</button>
+</form>
+
+<h3>Attendance Register</h3>
+<table>
+<thead>
+<tr>
+<th>Colleague Name</th>
+<th>Date</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody id="attendanceList"></tbody>
+</table>
+
+<p class="small">Demo only. Attendance is not yet shared with other members.</p>
 </section>
 
 <section id="records">
