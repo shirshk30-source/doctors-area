@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DOCTOR'S AREA</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial;background:#f1f5f9;color:#173047}
+header{background:#123b58;color:white;padding:25px 18px}
+header h1{margin:0;font-size:27px}
+header p{margin-bottom:0;color:#d6eaf3}
+main{padding:18px;max-width:850px;margin:auto}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+button{border:0;padding:12px 16px;border-radius:8px;background:#176b87;color:white;font-weight:bold;cursor:pointer}
+section{display:none;background:white;padding:18px;border-radius:12px;margin-bottom:15px}
+section.active{display:block}
+input,select{width:100%;padding:12px;margin:7px 0 15px;border:1px solid #ccd6df;border-radius:7px}
+label{font-weight:bold}
+h2{color:#176b87}
+.department{padding:13px;background:#e8f5f3;margin:7px 0;border-radius:7px}
+table{width:100%;border-collapse:collapse}
+td,th{padding:10px;border-bottom:1px solid #ddd;text-align:left}
+.small{color:#657786;font-size:13px}
+</style>
+</head>
+<body>
+<header>
+<h1>DOCTOR'S AREA</h1>
+<p>Private Medical Learning Community</p>
+</header>
+<main>
+<nav>
+<button onclick="show('home')">Home</button>
+<button onclick="show('cases')">Case Bank</button>
+<button onclick="show('attendance')">Attendance</button>
+<button onclick="show('records')">Daily Records</button>
+<button onclick="show('departments')">Departments</button>
+<button onclick="show('admin')">Admin</button>
+</nav>
+
+<section id="home" class="active">
+<h2>Welcome to DOCTOR'S AREA</h2>
+<p>Clinical learning and practical training platform.</p>
+<div class="department">11 Departments</div>
+<div class="department">Maximum 100 Members</div>
+<div class="department">Shared Case Bank</div>
+<div class="department">Attendance Management</div>
+</section>
+
+<section id="cases">
+<h2>Shared Case Bank</h2>
+<form id="caseForm">
+<label>Department</label>
+<select id="dept" required></select>
+<label>Case Name</label>
+<input id="case" required placeholder="Enter case name">
+<label>Patient Name / Anonymized ID</label>
+<input id="patient" required placeholder="Prefer anonymized ID">
+<label>Date of Admission</label>
+<input id="date" type="date" required>
+<button type="submit">Add Case</button>
+</form>
+<h3>Available Cases</h3>
+<div style="overflow-x:auto">
+<table>
+<thead><tr><th>Department</th><th>Case</th><th>Patient</th><th>Date</th></tr></thead>
+<tbody id="caseList"></tbody>
+</table>
+</div>
+<p class="small">Prototype only. Entries are stored in this browser, not shared with other members.</p>
+</section>
+
+<section id="attendance">
+<h2>Attendance</h2>
+<p>Attendance demonstration</p>
+<button onclick="document.getElementById('att').innerText='Check-in recorded for '+new Date().toLocaleString()">Mark Attendance</button>
+<p id="att"></p>
+</section>
+
+<section id="records">
+<h2>Daily Clinical Records</h2>
+<label>Date</label>
+<input type="date">
+<label>Department</label>
+<select class="deptSelect"></select>
+<label>Learning activity</label>
+<input placeholder="Enter general learning activity">
+<p class="small">Demo only. Do not enter confidential patient information.</p>
+</section>
+
+<section id="departments">
+<h2>Our Departments</h2>
+<div id="departmentList"></div>
+</section>
+
+<section id="admin">
+<h2>Admin Panel</h2>
+<p>Maximum members: 100</p>
+<p>Registration: Invitation only</p>
+<p>Roles: Administrator and Member</p>
+<p class="small">Secure login, invitations and member management require backend setup.</p>
+</section>
+</main>
+<script>
+const departments=[
+"Panchakarma","Agad Tantra","Shalya Tantra","Shalakya Tantra",
+"Stri and Prasuti Tantra","Physiotherapy","Swasthavritta",
+"LAB","Kaumarya","Kaya Chikitsa","Emergency"
+];
+function show(id){
+document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+}
+departments.forEach(d=>{
+document.getElementById("dept").add(new Option(d,d));
+document.querySelector(".deptSelect").add(new Option(d,d));
+document.getElementById("departmentList").innerHTML+=
+'<div class="department">'+d+'</div>';
+});
+let cases=[];
+document.getElementById("caseForm").onsubmit=function(e){
+e.preventDefault();
+let c=[dept.value,document.getElementById("case").value,
+document.getElementById("patient").value,
+document.getElementById("date").value];
+cases.push(c);
+document.getElementById("caseList").innerHTML=cases.map(row=>
+"<tr>"+row.map(v=>"<td>"+v.replace(/[&<>"]/g,"")+"</td>").join("")+"</tr>"
+).join("");
+this.reset();
+};
+</script>
+</body>
+</html>
