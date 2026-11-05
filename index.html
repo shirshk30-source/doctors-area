@@ -155,6 +155,27 @@ const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
 );
+async function loginMember() {
+  const email = document.getElementById("loginEmail").value;
+  const password = document.getElementById("loginPassword").value;
+  const message = document.getElementById("loginMessage");
+
+  message.textContent = "Signing in...";
+
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    message.textContent = error.message;
+    return;
+  }
+
+  document.getElementById("login").classList.remove("active");
+  document.querySelector("nav").style.display = "flex";
+  show("home");
+}
 const departments=[
 "Panchakarma","Agad Tantra","Shalya Tantra","Shalakya Tantra",
 "Stri and Prasuti Tantra","Physiotherapy","Swasthavritta",
