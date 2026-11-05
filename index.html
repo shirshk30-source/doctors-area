@@ -31,6 +31,20 @@ td,th{padding:10px;border-bottom:1px solid #ddd;text-align:left}
 <p>Private Medical Learning Community</p>
 </header>
 <main>
+<section id="login" class="active">
+  <h2>DOCTOR'S AREA Login</h2>
+
+  <label>Email</label>
+  <input id="loginEmail" type="email" required
+         placeholder="Enter your email">
+
+  <label>Password</label>
+  <input id="loginPassword" type="password" required
+         placeholder="Enter your password">
+
+  <button onclick="loginMember()">Login</button>
+  <p id="loginMessage"></p>
+</section>
 <nav>
 <button onclick="show('home')">Home</button>
 <button onclick="show('cases')">Case Bank</button>
