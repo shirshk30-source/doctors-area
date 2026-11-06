@@ -191,6 +191,66 @@ async function registerMember() {
     ? "Account created! You can now log in."
     : "Account created! Please verify your email before logging in.";
 }
+
+async function loadAttendance() {
+  const list = document.getElementById("attendanceList");
+  list.innerHTML = "<tr><td colspan='3'>Loading...</td></tr>";
+
+  const { data, error } = await supabaseClient
+    .from("attendance")
+    .select("colleague_name, attendance_date, marked_at")
+    .order("marked_at", { ascending: false });
+
+  if (error) {
+    list.innerHTML = "<tr><td colspan='3'>"+error.message+"</td></tr>";
+    return;
+  }
+
+  list.innerHTML = "";
+  data.forEach(item => {
+    const row = document.createElement("tr");
+    [item.colleague_name, item.attendance_date,
+     new Date(item.marked_at).toLocaleTimeString()]
+      .forEach(value => {
+        const cell = document.createElement("td");
+        cell.textContent = value;
+        row.appendChild(cell);
+      });
+    list.appendChild(row);
+  });
+}
+
+document.getElementById("attendanceForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const message = document.getElementById("attendanceMessage");
+  const name = document.getElementById("colleagueName").value.trim();
+
+  const { data: userData, error: userError } =
+    await supabaseClient.auth.getUser();
+
+  if (userError || !userData.user) {
+    alert("Please log in first.");
+    return;
+  }
+
+  const { error } = await supabaseClient.from("attendance").insert({
+    user_id: userData.user.id,
+    colleague_name: name
+  });
+
+  if (error) {
+    alert(error.code === "23505"
+      ? "Attendance already marked today."
+      : error.message);
+    return;
+  }
+
+  this.reset();
+  alert("Attendance marked successfully!");
+  loadAttendance();
+});
+
 async function loginMember() {
   const email = document.getElementById("loginEmail").value;
   const password = document.getElementById("loginPassword").value;
