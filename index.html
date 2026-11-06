@@ -47,6 +47,23 @@ td,th{padding:10px;border-bottom:1px solid #ddd;text-align:left}
 <p id="loginMessage"></p>
   <p id="loginMessage"></p>
 </section>
+<section id="signup">
+  <h2>Join DOCTOR'S AREA</h2>
+
+  <label>Email</label>
+  <input id="signupEmail" type="email" placeholder="Enter your email">
+
+  <label>Create Password</label>
+  <input id="signupPassword" type="password" placeholder="Create password">
+
+  <label>Invitation Code</label>
+  <input id="inviteCode" type="text" placeholder="Enter invitation code">
+
+  <button onclick="registerMember()">Create Account</button>
+  <button onclick="show('login')">Back to Login</button>
+
+  <p id="signupMessage"></p>
+</section>
 <nav>
 <button onclick="show('home')">Home</button>
 <button onclick="show('cases')">Case Bank</button>
@@ -157,6 +174,36 @@ const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
 );
+async function registerMember() {
+  const email = document.getElementById("signupEmail").value.trim();
+  const password = document.getElementById("signupPassword").value;
+  const inviteCode = document.getElementById("inviteCode").value.trim();
+  const message = document.getElementById("signupMessage");
+
+  if (!email || !password || !inviteCode) {
+    message.textContent = "Please fill all fields.";
+    return;
+  }
+
+  message.textContent = "Creating account...";
+
+  const { data, error } = await supabaseClient.auth.signUp({
+    email,
+    password,
+    options: {
+      data: { invite_code: inviteCode }
+    }
+  });
+
+  if (error) {
+    message.textContent = error.message;
+    return;
+  }
+
+  message.textContent = data.session
+    ? "Account created! You can now log in."
+    : "Account created! Please verify your email before logging in.";
+}
 async function loginMember() {
   const email = document.getElementById("loginEmail").value;
   const password = document.getElementById("loginPassword").value;
