@@ -278,8 +278,12 @@ const departments=[
 "LAB","Kaumarya","Kaya Chikitsa","Emergency"
 ];
 function show(id){
-document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
-document.getElementById(id).classList.add("active");
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+
+  if (id === "attendance") {
+    loadAttendance();
+  }
 }
 departments.forEach(d=>{
 document.getElementById("dept").add(new Option(d,d));
