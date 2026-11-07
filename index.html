@@ -493,6 +493,66 @@ document.getElementById("caseForm").onsubmit = async function(e) {
   alert("Case saved successfully!");
   await loadCases();
 };
+let dailyRecordsSearchData = [];
+
+async function loadDailyRecords() {
+  const list = document.getElementById("dailyRecordList");
+  list.innerHTML = "<tr><td colspan='3'>Loading...</td></tr>";
+
+  const { data, error } = await supabaseClient
+    .from("daily_records")
+    .select("record_date, department, learning_activity")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    list.textContent = error.message;
+    return;
+  }
+
+  dailyRecordsSearchData = data || [];
+  list.innerHTML = "";
+
+  dailyRecordsSearchData.forEach(item => {
+    const row = document.createElement("tr");
+
+    [item.record_date, item.department, item.learning_activity]
+      .forEach(value => {
+        const cell = document.createElement("td");
+        cell.textContent = value || "";
+        row.appendChild(cell);
+      });
+
+    list.appendChild(row);
+  });
+}
+
+document.getElementById("dailyRecordForm").onsubmit = async function(e) {
+  e.preventDefault();
+
+  const { data: userData, error: userError } =
+    await supabaseClient.auth.getUser();
+
+  if (userError || !userData.user) {
+    alert("Please log in first.");
+    return;
+  }
+
+  const { error } = await supabaseClient.from("daily_records").insert({
+    record_date: document.getElementById("recordDate").value,
+    department: document.getElementById("recordDepartment").value,
+    learning_activity: document.getElementById("learningActivity").value.trim(),
+    created_by: userData.user.id
+  });
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  this.reset();
+  alert("Daily record saved successfully!");
+  await loadDailyRecords();
+};
 </script>
 </body>
 </html>
