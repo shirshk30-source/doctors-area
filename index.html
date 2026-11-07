@@ -358,6 +358,9 @@ function show(id){
   document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 
+  const search = document.getElementById("globalSearch");
+  if (search) search.style.display = "block";
+
   if (id === "attendance") {
     loadAttendance();
   }
