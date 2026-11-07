@@ -235,6 +235,7 @@ async function loadAttendance() {
 
   list.innerHTML = "";
 attendanceSearchData = data;
+globalSearch.dispatchEvent(new Event("input"));
 data.forEach(item => {
     const row = document.createElement("tr");
     [item.colleague_name, item.attendance_date,
