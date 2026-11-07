@@ -334,6 +334,14 @@ globalSearch.addEventListener("input", function () {
     }
   });
 }
+attendanceSearchData.forEach(item => {
+  if (JSON.stringify(item).toLowerCase().includes(q)) {
+    results.push({
+      name: "Attendance: " + item.colleague_name + " | " + item.attendance_date,
+      section: "attendance"
+    });
+  }
+});
 
   ["Home", "Case Bank", "Attendance", "Daily Records", "Departments", "Admin"]
     .forEach(name => {
