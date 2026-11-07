@@ -325,12 +325,15 @@ globalSearch.addEventListener("input", function () {
   }
 
   if (typeof cases !== "undefined") {
-    cases.forEach(item => {
-      if (JSON.stringify(item).toLowerCase().includes(q)) {
-        results.push({ name: "Case Bank entry", section: "cases" });
-      }
-    });
-  }
+  cases.forEach(item => {
+    if (JSON.stringify(item).toLowerCase().includes(q)) {
+      results.push({
+        name: "Case: " + item[1] + " | Patient: " + item[2],
+        section: "cases"
+      });
+    }
+  });
+}
 
   ["Home", "Case Bank", "Attendance", "Daily Records", "Departments", "Admin"]
     .forEach(name => {
