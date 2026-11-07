@@ -394,6 +394,9 @@ function show(id){
   if (id === "attendance") {
     loadAttendance();
   }
+  if (id === "cases") {
+  loadCases();
+  }
 }
 departments.forEach(d=>{
 document.getElementById("dept").add(new Option(d,d));
