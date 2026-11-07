@@ -157,14 +157,37 @@ td,th{padding:10px;border-bottom:1px solid #ddd;text-align:left}
 </section>
 
 <section id="records">
-<h2>Daily Clinical Records</h2>
-<label>Date</label>
-<input type="date">
-<label>Department</label>
-<select class="deptSelect"></select>
-<label>Learning activity</label>
-<input placeholder="Enter general learning activity">
-<p class="small">Demo only. Do not enter confidential patient information.</p>
+<h2>Shared Daily Clinical Records</h2>
+
+<form id="dailyRecordForm">
+  <label>Date</label>
+  <input id="recordDate" type="date" required>
+
+  <label>Department</label>
+  <select id="recordDepartment" class="deptSelect" required></select>
+
+  <label>Learning activity</label>
+  <input id="learningActivity" required
+  placeholder="Enter general learning activity">
+
+  <button type="submit">Save Record</button>
+</form>
+
+<h3>Saved Records</h3>
+<div style="overflow-x:auto">
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Department</th>
+<th>Learning Activity</th>
+</tr>
+</thead>
+<tbody id="dailyRecordList"></tbody>
+</table>
+</div>
+
+<p class="small">Do not enter confidential patient information.</p>
 </section>
 
 <section id="departments">
