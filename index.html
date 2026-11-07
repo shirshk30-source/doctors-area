@@ -374,6 +374,22 @@ globalSearch.addEventListener("input", function () {
     }
   });
 }
+if (typeof dailyRecordsSearchData !== "undefined") {
+  dailyRecordsSearchData.forEach(item => {
+    const content = [
+      item.record_date,
+      item.department,
+      item.learning_activity
+    ].join(" ").toLowerCase();
+
+    if (content.includes(q)) {
+      results.push({
+        name: "Daily Record: " + item.department + " | " + item.learning_activity,
+        section: "records"
+      });
+    }
+  });
+}
 attendanceSearchData.forEach(item => {
   if (JSON.stringify(item).toLowerCase().includes(q)) {
     results.push({
