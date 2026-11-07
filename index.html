@@ -217,6 +217,7 @@ async function registerMember() {
     ? "Account created! You can now log in."
     : "Account created! Please verify your email before logging in.";
 }
+let attendanceSearchData = [];
 
 async function loadAttendance() {
   const list = document.getElementById("attendanceList");
