@@ -401,17 +401,71 @@ document.querySelector(".deptSelect").add(new Option(d,d));
 document.getElementById("departmentList").innerHTML+=
 '<div class="department">'+d+'</div>';
 });
-let cases=[];
-document.getElementById("caseForm").onsubmit=function(e){
-e.preventDefault();
-let c=[dept.value,document.getElementById("case").value,
-document.getElementById("patient").value,
-document.getElementById("date").value];
-cases.push(c);
-document.getElementById("caseList").innerHTML=cases.map(row=>
-"<tr>"+row.map(v=>"<td>"+v.replace(/[&<>"]/g,"")+"</td>").join("")+"</tr>"
-).join("");
-this.reset();
+let cases = [];
+
+async function loadCases() {
+  const list = document.getElementById("caseList");
+  list.innerHTML = "<tr><td colspan='4'>Loading...</td></tr>";
+
+  const { data, error } = await supabaseClient
+    .from("case_bank")
+    .select("department, case_name, patient_ref, admission_date")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    list.textContent = error.message;
+    return;
+  }
+
+  cases = data.map(item => [
+    item.department,
+    item.case_name,
+    item.patient_ref,
+    item.admission_date
+  ]);
+
+  list.innerHTML = "";
+  cases.forEach(item => {
+    const row = document.createElement("tr");
+    item.forEach(value => {
+      const cell = document.createElement("td");
+      cell.textContent = value || "";
+      row.appendChild(cell);
+    });
+    list.appendChild(row);
+  });
+
+  document.getElementById("globalSearch")
+    ?.dispatchEvent(new Event("input"));
+}
+
+document.getElementById("caseForm").onsubmit = async function(e) {
+  e.preventDefault();
+
+  const { data: userData, error: userError } =
+    await supabaseClient.auth.getUser();
+
+  if (userError || !userData.user) {
+    alert("Please log in first.");
+    return;
+  }
+
+  const { error } = await supabaseClient.from("case_bank").insert({
+    department: document.getElementById("dept").value,
+    case_name: document.getElementById("case").value.trim(),
+    patient_ref: document.getElementById("patient").value.trim(),
+    admission_date: document.getElementById("date").value,
+    created_by: userData.user.id
+  });
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  this.reset();
+  alert("Case saved successfully!");
+  await loadCases();
 };
 </script>
 </body>
