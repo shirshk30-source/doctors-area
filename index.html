@@ -303,6 +303,57 @@ const departments=[
 "Stri and Prasuti Tantra","Physiotherapy","Swasthavritta",
 "LAB","Kaumarya","Kaya Chikitsa","Emergency"
 ];
+  const globalSearch = document.getElementById("globalSearch");
+const searchResults = document.getElementById("searchResults");
+
+globalSearch.addEventListener("input", function () {
+  const q = this.value.toLowerCase().trim();
+  searchResults.innerHTML = "";
+
+  if (!q) return;
+
+  const results = [];
+
+  if (typeof departments !== "undefined") {
+    departments.forEach(item => {
+      if (String(item).toLowerCase().includes(q)) {
+        results.push({ name: item, section: "departments" });
+      }
+    });
+  }
+
+  if (typeof cases !== "undefined") {
+    cases.forEach(item => {
+      if (JSON.stringify(item).toLowerCase().includes(q)) {
+        results.push({ name: "Case Bank entry", section: "cases" });
+      }
+    });
+  }
+
+  ["Home", "Case Bank", "Attendance", "Daily Records", "Departments", "Admin"]
+    .forEach(name => {
+      if (name.toLowerCase().includes(q)) {
+        results.push({
+          name: name,
+          section: name.toLowerCase().replaceAll(" ", "")
+        });
+      }
+    });
+
+  results.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "search-result";
+    div.textContent = item.name;
+
+    div.onclick = () => show(item.section);
+
+    searchResults.appendChild(div);
+  });
+
+  if (!results.length) {
+    searchResults.textContent = "No results found";
+  }
+});
 function show(id){
   document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
