@@ -543,6 +543,8 @@ async function loadDailyRecords() {
 
     list.appendChild(row);
   });
+  document.getElementById("globalSearch")
+    ?.dispatchEvent(new Event("input"));
 }
 
 document.getElementById("dailyRecordForm").onsubmit = async function(e) {
