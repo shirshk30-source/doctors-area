@@ -234,7 +234,8 @@ async function loadAttendance() {
   }
 
   list.innerHTML = "";
-  data.forEach(item => {
+attendanceSearchData = data;
+data.forEach(item => {
     const row = document.createElement("tr");
     [item.colleague_name, item.attendance_date,
      new Date(item.marked_at).toLocaleTimeString()]
