@@ -316,6 +316,22 @@ globalSearch.addEventListener("input", function () {
   if (!q) return;
 
   const results = [];
+  document.querySelectorAll("#records input, #records select").forEach(field => {
+  const label = field.previousElementSibling;
+  const fieldName = label ? label.textContent : field.placeholder || "";
+  const value = field.value || "";
+
+  if (
+    fieldName.toLowerCase().includes(q) ||
+    value.toLowerCase().includes(q) ||
+    (field.placeholder || "").toLowerCase().includes(q)
+  ) {
+    results.push({
+      name: "Daily Records: " + fieldName,
+      section: "records"
+    });
+  }
+});
 
   if (typeof departments !== "undefined") {
     departments.forEach(item => {
